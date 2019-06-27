@@ -1257,7 +1257,7 @@ public class RCTMGLMapView extends MapView implements
         try {
            VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
            properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
-        } catch (exception: InvalidLatLngBoundsException) {
+        } catch (Exception e) {
            // The map view is unmounting so visible bounds are not available
         }
        
