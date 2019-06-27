@@ -1273,6 +1273,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     private WritableMap makeRegionPayload() {
+        
         CameraPosition position = mMap.getCameraPosition();
         LatLng latLng = new LatLng(position.target.getLatitude(), position.target.getLongitude());
 
@@ -1282,9 +1283,14 @@ public class RCTMGLMapView extends MapView implements
         properties.putDouble("pitch", position.tilt);
         properties.putBoolean("animated", mCameraChangeTracker.isAnimated());
         properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction());
-
-        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
+        
+        try {
+           VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+           properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
+        } catch (exception: InvalidLatLngBoundsException) {
+           // The map view is unmounting so visible bounds are not available
+        }
+       
 
         return GeoJSONUtils.toPointFeature(latLng, properties);
     }
